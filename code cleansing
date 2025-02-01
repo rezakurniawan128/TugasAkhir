@@ -1,0 +1,39 @@
+import pandas as pd
+from google.colab import files
+
+# Langkah 1: Upload file
+uploaded = files.upload()
+
+# Langkah 2: Ambil nama file yang diunggah
+for file_name in uploaded.keys():
+    print(f"File yang diunggah: {file_name}")
+    file_path = file_name  # Nama file yang diunggah
+
+# Langkah 3: Baca file Excel
+df = pd.read_excel(file_path)
+
+# Tampilkan data awal
+print("Data Awal:")
+print(df.head())
+
+# Hapus kolom yang tidak diperlukan
+# Ganti dengan nama kolom yang ingin dihapus
+if df.shape[1] > 33:  # Pastikan ada lebih dari 32 kolom
+    df = df.iloc[:, :33 ]  # Ambil kolom 0 sampai 31 (kolom ke-32 tidak termasuk)
+
+# Langkah 4: Hapus baris 7 sampai 45
+# Hapus kolom A (kolom pertama) dan baris 1 (baris pertama)
+df = df.iloc[0:, 1:]  # Baris mulai dari indeks 1, kolom mulai dari indeks 1
+
+df = df.drop(df.index[0:4])  # Hapus baris 1-4
+df = df.drop(df.index[6:])    # Hapus baris 7-50, karena index mulai dari 0
+
+# Simpan data yang sudah dibersihkan ke file baru
+cleaned_file_path = "databersihjul.xlsx"
+df.to_excel(cleaned_file_path, index=False)
+
+print("Data yang sudah dibersihkan:")
+print(df.head())
+
+# Langkah 5: Unduh file hasil
+files.download(cleaned_file_path)
