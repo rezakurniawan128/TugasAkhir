@@ -1,0 +1,26 @@
+# Step 1: Upload file
+from google.colab import files
+
+# Upload file Excel
+uploaded = files.upload()
+
+# Step 2: Import library
+import pandas as pd
+
+# Nama file (otomatis sesuai dengan file yang diunggah)
+file_name = list(uploaded.keys())[0]
+
+# Step 3: Baca semua sheet
+all_sheets = pd.read_excel(file_name, sheet_name=None)  # sheet_name=None membaca semua sheet
+
+# Step 4: Gabungkan semua sheet
+combined_data = pd.concat(all_sheets.values(), ignore_index=True)
+
+# Step 5: Simpan hasil ke file baru
+output_file = "combined_sheets.xlsx"
+combined_data.to_excel(output_file, index=False, sheet_name="Combined_Sheet")
+
+# Step 6: Unduh file hasil
+files.download(output_file)
+
+print(f"File hasil '{output_file}' telah selesai dan siap diunduh.")
