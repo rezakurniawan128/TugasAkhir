@@ -1,0 +1,60 @@
+import pandas as pd
+from google.colab import files
+from io import BytesIO
+from IPython.display import display
+
+# Fungsi untuk upload file
+def upload_file():
+    uploaded = files.upload()
+    if uploaded:
+        file_name = next(iter(uploaded))
+        return pd.read_excel(BytesIO(uploaded[file_name]))
+    return None
+
+print("=== Pengecekan dan Pengisian Missing Values pada Dataset ===")
+df = upload_file()
+
+if df is not None:
+    # Menampilkan informasi awal dataset
+    print("\nInformasi Dataset:")
+    print(df.info())
+
+    print("\n5 Data Pertama:")
+    display(df.head())
+
+    # Mengecek jumlah missing values per kolom
+    print("\nJumlah Missing Values per Kolom (Sebelum):")
+    missing_counts = df.isnull().sum()
+    print(missing_counts)
+
+    # Jika ada missing values, tampilkan baris yang memiliki missing values
+    if missing_counts.any():
+        print("\nBaris yang Memiliki Missing Values:")
+        missing_rows = df[df.isnull().any(axis=1)]
+        display(missing_rows)
+
+        # Menghitung persentase missing values
+        print("\nPersentase Missing Values per Kolom:")
+        print((df.isnull().sum() / len(df) * 100).round(2), "%")
+
+        # Mengisi missing values dengan forward fill
+        print("\nMengisi Missing Values menggunakan Forward Fill...")
+        df_filled = df.fillna(method='ffill')
+
+        # Mengecek hasil pengisian
+        print("\nJumlah Missing Values per Kolom (Setelah):")
+        print(df_filled.isnull().sum())
+
+        # Menyimpan hasil ke file baru
+        output_file = "dataset_no_missing_values.xlsx"
+        df_filled.to_excel(output_file, index=False)
+
+        print(f"\nFile telah disimpan sebagai: {output_file}")
+        print("\nMengunduh file...")
+        files.download(output_file)
+
+    else:
+        print("\nTidak ditemukan missing values dalam dataset!")
+
+else:
+    print("Tidak ada file yang diunggah!")
