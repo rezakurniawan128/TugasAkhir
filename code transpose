@@ -1,0 +1,31 @@
+import pandas as pd
+
+# Fungsi utama
+def main():
+    # Meminta pengguna memasukkan nama file
+    file_path = input("Masukkan nama file (dengan ekstensi .xlsx): ")
+
+    try:
+        # Membaca file Excel
+        data = pd.read_excel(file_path, engine='openpyxl')
+        print("Dataset Asli:")
+        print(data)
+
+        # Melakukan transpose
+        data_transposed = data.transpose()
+
+        print("\nDataset Setelah Transpose:")
+        print(data_transposed)
+
+        # Simpan hasil ke file baru
+        output_file = "data_transposed_jul.xlsx"
+        data_transposed.to_excel(output_file, index=False, header=False, engine='openpyxl')
+        print(f"\nDataset telah disimpan ke file: {output_file}")
+
+    except FileNotFoundError:
+        print("File tidak ditemukan. Pastikan file berada di direktori yang sama dengan skrip.")
+    except Exception as e:
+        print(f"Terjadi kesalahan: {e}")
+
+if __name__ == "__main__":
+    main()
