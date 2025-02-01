@@ -1,0 +1,71 @@
+import requests
+
+# Daftar URL unduhan dan nama file output
+downloads = [
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-01&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_jan_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-02&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_feb_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-03&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_mar_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-04&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_apr_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-05&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_mei_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-06&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_jun_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-07&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_jul_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-08&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_agu_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-09&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_sep_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-10&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_okt_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-11&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_nov_2024.xlsx"
+    },
+    {
+        "url": "https://infopangan.jakarta.go.id/api2/v1/public/report/download?filterBy=city&Id=1&yearMonth=2024-12&fullname=azer&organization_name=trisakti",
+        "output_file": "data_jakarta_barat_des_2024.xlsx"
+    }
+]
+
+# Proses unduh untuk setiap file
+for item in downloads:
+    try:
+        print(f"Mengunduh: {item['url']}")
+        response = requests.get(item['url'], stream=True)
+        response.raise_for_status()  # Periksa apakah permintaan berhasil
+
+        # Simpan file ke lokasi yang ditentukan
+        with open(item['output_file'], "wb") as file:
+            for chunk in response.iter_content(chunk_size=8192):  # Unduh file dalam potongan kecil
+                file.write(chunk)
+
+        print(f"File berhasil diunduh ke: {item['output_file']}\n")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Terjadi kesalahan saat mengunduh file: {item['output_file']}")
+        print(f"Kesalahan: {e}\n")
