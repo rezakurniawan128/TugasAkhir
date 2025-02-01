@@ -1,0 +1,28 @@
+import pandas as pd
+from google.colab import files
+
+# Langkah 1: Upload file Excel
+uploaded = files.upload()
+
+# Langkah 2: Ambil nama file yang diunggah
+file_names = list(uploaded.keys())
+print("File yang diunggah:", file_names)
+
+# Langkah 3: Membuat file Excel baru dengan banyak sheet
+output_file = "gabungan_file.xlsx"
+
+with pd.ExcelWriter(output_file) as writer:
+    for file_name in file_names:
+        # Baca setiap file Excel
+        df = pd.read_excel(file_name)
+
+        # Gunakan nama file sebagai nama sheet (tanpa ekstensi)
+        sheet_name = file_name.split('.')[0]
+
+        # Tulis DataFrame ke dalam sheet
+        df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+print(f"File gabungan telah disimpan sebagai {output_file}")
+
+# Langkah 4: Unduh file hasil
+files.download(output_file)
